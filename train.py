@@ -58,17 +58,31 @@ def main() -> None:
         weight_decay=config.train.weight_decay
     )
     
-    # 7. Initialize Trainer
+    # Cosine Annealing Learning Rate Scheduler
+    lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer,
+        T_max=config.train.epochs,
+        eta_min=1e-6
+    )
+
+    # 7. Initialize Loss Modules
+    from losses.info_nce import SupervisedInfoNCELoss
+    criterion_ce = torch.nn.CrossEntropyLoss()
+    criterion_info = SupervisedInfoNCELoss(temperature=config.train.temperature)
+    
+    # 8. Initialize Trainer
     trainer = GeoCrossTrainer(
         config=config,
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
         optimizer=optimizer,
-        lr_scheduler=None
+        lr_scheduler=lr_scheduler,
+        criterion_ce=criterion_ce,
+        criterion_info=criterion_info
     )
 
-    # 8. Start Fitting
+    # 9. Start Fitting
     logger.info(f"Starting model fit in '{args.mode}' mode...")
     trainer.fit()
     logger.info("Fitting process finished successfully.")

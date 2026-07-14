@@ -66,6 +66,14 @@ class TrainConfig:
     checkpoint_dir: str = "checkpoints/"
     log_dir: str = "logs/"
     seed: int = 42
+    
+    # Training pipeline configurations
+    lambda_info: float = 0.3
+    patience: int = 10
+    use_amp: bool = True
+    use_tensorboard: bool = True
+    best_metric_name: str = "val_acc"  # "val_acc" or "val_loss"
+    grad_clip: float = 1.0
 
 
 @dataclass
