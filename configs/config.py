@@ -45,8 +45,10 @@ class ModelConfig:
 @dataclass
 class DatasetConfig:
     """Configuration for data loading and preprocessing."""
-    csv_path: str = "data/metadata.csv"
-    img_dir: str = "data/images/"
+    csv_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/Biomarker_Clinical_Data_Images.csv"
+    xlsx_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/Clinical_Data_Images.xlsx"
+    dr_xlsx_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/OCT-DR.xlsx"
+    img_dir: str = "D:/dataset/OLIVES/OLIVES/Prime_FULL/Prime_FULL"
     batch_size: int = 32
     num_workers: int = 4
     pin_memory: bool = True

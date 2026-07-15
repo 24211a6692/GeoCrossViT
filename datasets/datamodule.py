@@ -14,7 +14,7 @@ from typing import Optional
 from torch.utils.data import DataLoader
 
 from configs.config import GeoCrossViTConfig
-from datasets.dataset import GeoCrossDataset
+from datasets.olives_dataset import OlivesDataset
 from datasets.transforms import CoordinatedGeoTransforms
 
 
@@ -30,9 +30,9 @@ class RetinalDataModule:
         """
         self.config = config
         
-        self.train_dataset: Optional[GeoCrossDataset] = None
-        self.val_dataset: Optional[GeoCrossDataset] = None
-        self.test_dataset: Optional[GeoCrossDataset] = None
+        self.train_dataset: Optional[OlivesDataset] = None
+        self.val_dataset: Optional[OlivesDataset] = None
+        self.test_dataset: Optional[OlivesDataset] = None
 
     def setup(self, stage: Optional[str] = None) -> None:
         """
@@ -52,23 +52,20 @@ class RetinalDataModule:
         )
 
         if stage == "fit" or stage is None:
-            self.train_dataset = GeoCrossDataset(
-                csv_path=self.config.dataset.csv_path,
-                img_dir=self.config.dataset.img_dir,
+            self.train_dataset = OlivesDataset(
+                config=self.config,
                 transform=train_transform,
                 split="train"
             )
-            self.val_dataset = GeoCrossDataset(
-                csv_path=self.config.dataset.csv_path,
-                img_dir=self.config.dataset.img_dir,
+            self.val_dataset = OlivesDataset(
+                config=self.config,
                 transform=val_transform,
                 split="val"
             )
 
         if stage == "test" or stage is None:
-            self.test_dataset = GeoCrossDataset(
-                csv_path=self.config.dataset.csv_path,
-                img_dir=self.config.dataset.img_dir,
+            self.test_dataset = OlivesDataset(
+                config=self.config,
                 transform=val_transform,
                 split="test"
             )
