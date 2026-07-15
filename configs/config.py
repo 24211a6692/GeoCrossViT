@@ -9,7 +9,7 @@ TODO:
 - Add CLI parser support or OmegaConf/YAML integration.
 - Define specific modal dimension sizes and Transformer hyperparameter ranges.
 """
-
+import os
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -45,14 +45,48 @@ class ModelConfig:
 @dataclass
 class DatasetConfig:
     """Configuration for data loading and preprocessing."""
-    csv_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/Biomarker_Clinical_Data_Images.csv"
-    xlsx_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/Clinical_Data_Images.xlsx"
-    dr_xlsx_path: str = "D:/dataset/OLIVES/OLIVES/OLIVES_Dataset_Labels/full_labels/OCT-DR.xlsx"
-    img_dir: str = "D:/dataset/OLIVES/OLIVES/Prime_FULL/Prime_FULL"
+
+    data_root: str = os.getenv(
+        "DATA_ROOT",
+        "D:/dataset/OLIVES/OLIVES"
+    )
+
+    csv_path: str = field(init=False)
+    xlsx_path: str = field(init=False)
+    dr_xlsx_path: str = field(init=False)
+    img_dir: str = field(init=False)
+
     batch_size: int = 32
     num_workers: int = 4
     pin_memory: bool = True
     persistent_workers: bool = True
+
+    def __post_init__(self):
+        self.csv_path = os.path.join(
+            self.data_root,
+            "OLIVES_Dataset_Labels",
+            "full_labels",
+            "Biomarker_Clinical_Data_Images.csv",
+        )
+
+        self.xlsx_path = os.path.join(
+            self.data_root,
+            "OLIVES_Dataset_Labels",
+            "full_labels",
+            "Clinical_Data_Images.xlsx",
+        )
+
+        self.dr_xlsx_path = os.path.join(
+            self.data_root,
+            "OLIVES_Dataset_Labels",
+            "full_labels",
+            "OCT-DR.xlsx",
+        )
+
+        self.img_dir = os.path.join(
+            self.data_root,
+            "Prime_FULL",
+        )
 
 
 @dataclass
